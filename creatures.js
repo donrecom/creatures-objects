@@ -121,7 +121,7 @@ function newYear() {
   }
   if (LogSwitch.statisticForYear != 0) statistic();
   //elseif (LogSwitch.Generation != 0) console.log("Generation " + generation);
- // Show current number Generation (cycle,year) , statistics / if LogSwitch!=0
+  // Show current number Generation (cycle,year) , statistics / if LogSwitch!=0
   generation++;
 }
 
@@ -326,29 +326,26 @@ function BornType(countAll, countFem, CreaturesType, subTypeCreature) {
   // countFem- number of females of this type
   //setting all initial parameters for each created creature
   for (CreatureOfType = 1; CreatureOfType <= countAll; CreatureOfType++) {
-    let gender = CreatureOfType <= countFem ? "female" : "male", // for the new creatures
-      age = 1, //                                          identified distinctive properties
-      parent = "God",
-      subType = subTypeCreature;
-    allCreatures.push(
-      new CreatureConstructor(
-        gender,
-        age,
-        parent,
-        parent,
-        CreaturesType,
-        subType
-      )
-    ); // added the Creature object to the array
-   /* console.log(
-      allCreatures[allCreatures.length - 1].id +
-        " / " +
-        allCreatures[allCreatures.length - 1].subType
-    );*/
-    if (LogSwitch.ParametersNewCreature != 0)
-      descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
+    if (allCreatures.length <= 5000000) {
+      let gender = CreatureOfType <= countFem ? "female" : "male", // for the new creatures
+        age = 1, //                                          identified distinctive properties
+        parent = "God",
+        subType = subTypeCreature;
+      allCreatures.push(
+        new CreatureConstructor(
+          gender,
+          age,
+          parent,
+          parent,
+          CreaturesType,
+          subType
+        )
+      ); // added the Creature object to the array
+      if (LogSwitch.ParametersNewCreature != 0)
+        descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
+    }
   }
-  // id--; // removed the last redundant addition to the creature counter
+  // id--; // removed the last redundant
 }
 
 function CreatureConstructor(
@@ -409,7 +406,7 @@ function mixCreatures() {
     numCreature = mixingCreatures.length - 1;
     numCreature >= 0;
     numCreature--
-  ) { 
+  ) {
     randomIndex = Math.floor(Math.random() * (numCreature + 1));
     timeSlot = mixingCreatures[randomIndex];
     mixingCreatures[randomIndex] = mixingCreatures[numCreature];
@@ -602,36 +599,36 @@ function BirthCreatures(CreaturesType, Creature = Array(2)) {
   )
     console.log(`${parent[0]}: - I love you! 
 ${parent[1]}: - I love you too! `);
-  // id++;
-  let gender = rnd(2, 0) == 1 ? "female" : "male",
-    age = 0,
-    parent1 = Creature[0], // generation 0   id 1  gender 2  nameCr 3  age 4  lifespan 5
-    parent2 = Creature[1], // parent1 6  parent2 7   Type 8   subType 9    mood 10   numInBase 11
-    subType = install_TypeSubType(CreaturesType); // todo>    Entering the CreaturesType and subType of the creature --> Look 15.install_TypeSubType(nType)
-  mood = switchMood(); // todo>  Check the mood of creature :)  :(  :o  --> Look 16.switchMood()
-  allCreatures.push(
-    // added the Creature object to the array
-    new CreatureConstructor(
-      gender,
-      age,
-      parent1,
-      parent2,
-      CreaturesType,
-      subType
-    )
-  );
- /* console.log(
-    allCreatures[allCreatures.length - 1].id +
-      " / " +
-      allCreatures[allCreatures.length - 1].subType
-  );*/
-  if (LogSwitch.typeWhoBorn != 0)
-    // todo>    Created a description of the creature
-    console.log(
-      subType + " is Born !!! happy parents " + parent[0] + " and " + parent[1]
-    ); // show subType who was born
-  if (LogSwitch.detaleWhoBorn != 0)
-    descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
+  if (allCreatures.length <= 5000000) {
+    let gender = rnd(2, 0) == 1 ? "female" : "male",
+      age = 0,
+      parent1 = Creature[0], // generation 0   id 1  gender 2  nameCr 3  age 4  lifespan 5
+      parent2 = Creature[1], // parent1 6  parent2 7   Type 8   subType 9    mood 10   numInBase 11
+      subType = install_TypeSubType(CreaturesType); // todo>    Entering the CreaturesType and subType of the creature --> Look 15.install_TypeSubType(nType)
+    mood = switchMood(); // todo>  Check the mood of creature :)  :(  :o  --> Look 16.switchMood()
+    allCreatures.push(
+      // added the Creature object to the array
+      new CreatureConstructor(
+        gender,
+        age,
+        parent1,
+        parent2,
+        CreaturesType,
+        subType
+      )
+    );
+    if (LogSwitch.typeWhoBorn != 0)
+      // todo>    Created a description of the creature
+      console.log(
+        subType +
+          " is Born !!! happy parents " +
+          parent[0] +
+          " and " +
+          parent[1]
+      ); // show subType who was born
+    if (LogSwitch.detaleWhoBorn != 0)
+      descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
+  }
 }
 
 // ! 14. Namer(gender) -   make a name: ending - depending on gender, the rest of the letters - by alternating consonants and vowels
@@ -774,6 +771,10 @@ function DeathСheck(i) {
     }
     allCreatures[i] = allCreatures[allCreatures.length - 1]; // rewrote the last creature in the array to the place of the deceased,
     allCreatures.pop(); // and then deleted the last entry in the array
+    if ((allCreatures.length = 0)) {
+      console.log(" !!! There was an extinction of civilization !");
+      return;
+    }
   }
 }
 
