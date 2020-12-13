@@ -32,25 +32,25 @@ Water Vapor - is born with a 50/50 probability of Spirit or Water (in any condit
 
 /**  ! 1. initial Data                 
   count of  1.cycleTimeMinutes (if "0" -> without delay) 2.lifeTimeMenagerieMinutes)  3.lifespanCreature
-  CreaturesType: Woods, WoodFemales, Steels, SteelFemales, Spirits, SpiritFemale
-  typeWaterCreature:   WaterIce   WaterIceFemale   Water   WaterIceFemale  WaterSream   15.WaterSream */
+  CreaturesType: Woods, WoodFem, Steels, SteelFem, Spirits, SpiritFem
+  typeWaterCreature:   WaterIce   WaterIceFem   Water   WaterIceFem  WaterSream   15.WaterSream */
 
 let InstalCreaturesData = {
   cycleTimeMinutes: 0,
   lifeTimeMenagerieMinutes: 1,
   lifespanCreature: 10,
   Woods: 12,
-  WoodFemales: 6,
+  WoodFem: 6,
   Steels: 12,
-  SteelFemales: 6,
+  SteelFem: 6,
   Spirits: 12,
-  SpiritFemale: 6,
+  SpiritFem: 6,
   WaterIce: 4,
-  WaterIceFemale: 2,
+  WaterIceFem: 2,
   WaterLiquid: 4,
-  WaterLiquidFemale: 2,
+  WaterLiquidFem: 2,
   WaterSream: 4,
-  WaterSreamFemale: 2,
+  WaterSreamFem: 2,
 };
 {
   /** { Log parts switches. Put something in quotation marks to include the corresponding log.
@@ -64,24 +64,30 @@ let InstalCreaturesData = {
 LogSwitch = {
   Generation: 1,
   statisticForYear: 1,
-  StatEvery5genOrZeroing: 1,
-  ParametersNewCreature: 1,
-  Dialogs: 1,
-  typeWhoBorn: 1,
-  detaleWhoBorn: 1,
-  typeWhoDiedAge: 1,
+  StatEvery5genOrZeroing: 0,
+  ParametersNewCreature: 0,
+  Dialogs: 0,
+  typeWhoBorn: 0,
+  detaleWhoBorn: 0,
+  typeWhoDiedAge: 0,
 };
-let sum = InstalCreaturesData.Woods + InstalCreaturesData.Steels + InstalCreaturesData.Spirits + InstalCreaturesData.WaterIce + InstalCreaturesData.Water + InstalCreaturesData.WaterSream;
+let sum =
+  InstalCreaturesData.Woods +
+  InstalCreaturesData.Steels +
+  InstalCreaturesData.Spirits +
+  InstalCreaturesData.WaterIce +
+  InstalCreaturesData.Water +
+  InstalCreaturesData.WaterSream;
 
 // ! 2.  BEGIN of the Program
 {
   console.log("Big Bang !!!");
- // var InstalCreaturesData = []; // todo>   We declare global counters and data arrays :
+  // var InstalCreaturesData = []; // todo>   We declare global counters and data arrays :
   var allCreatures = []; // array for menagerie creatures
   var labelZeroingType = { wood: 1, steel: 1, spirit: 1, water: 1 }; // array-label for nullified tipes
   var generation = 0; // for 1-st generation
   var id = 0; // counter of creatur
- // initialData(); // todo>   initial Data --> Look 0.initialData()
+  // initialData(); // todo>   initial Data --> Look 0.initialData()
   timerOfWarld(); // todo>   turn on the timer of cycles (years or generations) --> Look 3.timerOfWarld()
 }
 
@@ -97,12 +103,12 @@ function timerOfWarld() {
     // else turn on the cycle timer
     let timer = setInterval(
       () => newYear(),
-      InstalCreaturesData[0] * 60 * 1000
+      InstalCreaturesData.cycleTimeMinutes * 60 * 1000
     ); // repeat newYear after "cycleTime" minutes
     setTimeout(() => {
       clearInterval(timer); // and set the End of the World
       console.log("End of the Warld !");
-    }, InstalCreaturesData[1] * 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
+    }, InstalCreaturesData.lifeTimeMenagerieMinutes * 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
   }
 }
 
@@ -113,8 +119,9 @@ function newYear() {
   } else {
     Life(); // todo>        if it's not the first time --> Look 8.Life()
   }
-  if (LogSwitch.Generation != "") console.log("Generation " + generation); // Show current number Generation (cycle,year) / if LogSwitch!=""
-  if (LogSwitch.statisticForYear != "") statistic(); // todo>     show statistics of the past year --> Look 5.statistic()  /  if LogSwitch!=""
+  if (LogSwitch.statisticForYear != 0) statistic();
+  //elseif (LogSwitch.Generation != 0) console.log("Generation " + generation);
+ // Show current number Generation (cycle,year) , statistics / if LogSwitch!=0
   generation++;
 }
 
@@ -153,8 +160,8 @@ function statistic() {
       } else {
         statistic.male++; // counter male
       }
-      switch (allCreatures[i].Type) {
-        case 'wood':
+      switch (allCreatures[i].CreaturesType) {
+        case "wood":
           {
             statistic.wood++; // counter type of Wood (& female, & male)
             if (allCreatures[i].gender == "female") {
@@ -197,9 +204,9 @@ function statistic() {
                 {
                   statistic.waterIce++; // counter subType of waterIce (& female, & male)
                   if (allCreatures[i].gender == "female") {
-                    statistic.WaterIceFemale++;
+                    statistic.waterIceFem++;
                   } else {
-                    statistic.waterLiquidMale++;
+                    statistic.waterIceMale++;
                   }
                 }
                 break;
@@ -249,7 +256,7 @@ function statistic() {
       doStat = 1;
     }
 
-    if (LogSwitch.StatEvery5genOrZeroing != "") {
+    if (LogSwitch.StatEvery5genOrZeroing != 0) {
       // --> Write statistic every 5-th generation & statistic when zeroing amount of any type of creatures
       if (generation % 5 == 0 || doStat == 1) logstat(statistic);
     } else {
@@ -262,13 +269,14 @@ function statistic() {
 
 // ! 6. logstat(statistic)  - statistics log by type
 function logstat(statistic) {
+  console.log("Generation " + generation);
   console.log(`All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
 Wood-${statistic.wood} f-${statistic.woodFem}/m-${statistic.woodMale}
-Steel-${statistic}.steel} f-${statistic.steelFem}/m-${statistic.steelMale}
+Steel-${statistic.steel} f-${statistic.steelFem}/m-${statistic.steelMale}
 Spirit-${statistic.spirit} f-${statistic.spiritFem}/m-${statistic.spiritMale}
 Water-${statistic.water} f-${statistic.waterFem}/m-${statistic.waterMale}
-Ice water-${statistic.waterIce} f-${statistic.waterIceFemale}/m-${statistic.waterIceMale}
-Liquid water-${statistic}.waterLiquid} f-${statistic.waterLiquidFem}/m-${statistic.waterLiquidMale}
+Ice water-${statistic.waterIce} f-${statistic.waterIceFem}/m-${statistic.waterIceMale}
+Liquid water-${statistic.waterLiquid} f-${statistic.waterLiquidFem}/m-${statistic.waterLiquidMale}
 WaterSream-${statistic.waterSream} f-${statistic.waterSreamFem}/m-${statistic.waterSreamMale}
 `);
 }
@@ -277,37 +285,37 @@ WaterSream-${statistic.waterSream} f-${statistic.waterSreamFem}/m-${statistic.wa
 function InstallCreatures() {
   BornType(
     InstalCreaturesData.Woods,
-    InstalCreaturesData.WoodFemales,
+    InstalCreaturesData.WoodFem,
     "wood",
     "wood"
   );
   BornType(
     InstalCreaturesData.Steels,
-    InstalCreaturesData.SteelFemales,
+    InstalCreaturesData.SteelFem,
     "steel",
     "steel"
   );
   BornType(
     InstalCreaturesData.Spirits,
-    InstalCreaturesData.SpiritFemale,
+    InstalCreaturesData.SpiritFem,
     "spirit",
     "spirit"
   );
   BornType(
     InstalCreaturesData.WaterIce,
-    InstalCreaturesData.WaterIceFemale,
+    InstalCreaturesData.WaterIceFem,
     "water",
     "ice"
   );
   BornType(
     InstalCreaturesData.WaterLiquid,
-    InstalCreaturesData.WaterLiquidFemale,
+    InstalCreaturesData.WaterLiquidFem,
     "water",
     "liquid"
   );
   BornType(
     InstalCreaturesData.WaterSream,
-    InstalCreaturesData.WaterSreamFemale,
+    InstalCreaturesData.WaterSreamFem,
     "water",
     "sream"
   );
@@ -322,14 +330,35 @@ function BornType(countAll, countFem, CreaturesType, subTypeCreature) {
       age = 1, //                                          identified distinctive properties
       parent = "God",
       subType = subTypeCreature;
-    allCreatures.push(new CreatureConstructor(gender, age, parent, parent, CreaturesType, subType)); // added the Creature object to the array
-    if (LogSwitch.ParametersNewCreature != "")
+    allCreatures.push(
+      new CreatureConstructor(
+        gender,
+        age,
+        parent,
+        parent,
+        CreaturesType,
+        subType
+      )
+    ); // added the Creature object to the array
+   /* console.log(
+      allCreatures[allCreatures.length - 1].id +
+        " / " +
+        allCreatures[allCreatures.length - 1].subType
+    );*/
+    if (LogSwitch.ParametersNewCreature != 0)
       descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
   }
   // id--; // removed the last redundant addition to the creature counter
 }
 
-function CreatureConstructor(gender, age, parent1, parent2, CreaturesType, subType) {
+function CreatureConstructor(
+  gender,
+  age,
+  parent1,
+  parent2,
+  CreaturesType,
+  subType
+) {
   (this.generation = generation), // 0
     (this.id = id), // 1
     (this.gender = gender); // 2 // set gender
@@ -380,7 +409,7 @@ function mixCreatures() {
     numCreature = mixingCreatures.length - 1;
     numCreature >= 0;
     numCreature--
-  ) {
+  ) { 
     randomIndex = Math.floor(Math.random() * (numCreature + 1));
     timeSlot = mixingCreatures[randomIndex];
     mixingCreatures[randomIndex] = mixingCreatures[numCreature];
@@ -391,10 +420,10 @@ function mixCreatures() {
 
 // ! 10 meetingtolk(Creature=Array(2))
 function meetingtolk(Creature = Array(2)) {
-  if (LogSwitch.Dialogs != "") historyWrite([Creature[0], Creature[1]]); // Сompose meeting history // todo> --> Look   historyWrite (Creature=Array(2))
+  if (LogSwitch.Dialogs != 0) historyWrite([Creature[0], Creature[1]]); // Сompose meeting history // todo> --> Look   historyWrite (Creature=Array(2))
   allCreatures[Creature[0]].mood = switchMood(); // mood 1 changes when thay meet  :)  :(  :o  --> Look 16.switchMood()
   allCreatures[Creature[1]].mood = switchMood(); // mood 2 changes  --> Look 16.switchMood()
-  if (LogSwitch.Dialogs != "") DialogWrite([Creature[0], Creature[1]]); // Сompose meeting dialog // todo> --> Look   DialogWrite (Creature=Array(2))
+  if (LogSwitch.Dialogs != 0) DialogWrite([Creature[0], Creature[1]]); // Сompose meeting dialog // todo> --> Look   DialogWrite (Creature=Array(2))
 }
 
 // ! 10.1 historyWrite(Creature=Array(2))    -   Сompose meeting history
@@ -484,7 +513,7 @@ function lifespanFunc(Creature = Array(2)) {
       break;
   }
 
-  if (LogSwitch.Dialogs != "") {
+  if (LogSwitch.Dialogs != 0) {
     let dialog = "";
     for (let companion = 0; companion < Creature.length; companion++) {
       if (lifespan[companion] != 0) {
@@ -531,9 +560,13 @@ function checkBirth(Creature = Array(2)) {
     allCreatures[Creature[1]].age > 2 &&
     allCreatures[Creature[0]].gender != allCreatures[Creature[1]].gender; // and gender are different
   if (if1) {
-    let if2 = allCreatures[Creature[0]].CreaturesType == allCreatures[Creature[1]].CreaturesType; // condition 2: if types of creatures is equal -
+    let if2 =
+      allCreatures[Creature[0]].CreaturesType ==
+      allCreatures[Creature[1]].CreaturesType; // condition 2: if types of creatures is equal -
     if (if2) {
-      let subType =install_TypeSubType(allCreatures[Creature[0]].CreaturesType); 
+      let subType = install_TypeSubType(
+        allCreatures[Creature[0]].CreaturesType
+      );
       BirthCreatures(allCreatures[Creature[0]].CreaturesType, [
         Creature[0],
         Creature[1],
@@ -547,9 +580,9 @@ function checkBirth(Creature = Array(2)) {
         (st2 == "spirit" && st1 == "waterSream"); //if "Half-breed!"
       if (if3) {
         // Rase-probability 50/50 "spirit" / "water"
-       CreaturesType = rnd(2, -1) == 1 ? "spirit" :"water" ; // 3 -spirit / 4-water (subType - randomly choose subTipe - Ice/Water/Sream)
-      BirthCreatures(CreaturesType, [Creature[0], Creature[1]]); 
-    }
+        CreaturesType = rnd(2, -1) == 1 ? "spirit" : "water"; // 3 -spirit / 4-water (subType - randomly choose subTipe - Ice/Water/Sream)
+        BirthCreatures(CreaturesType, [Creature[0], Creature[1]]);
+      }
       // todo>   Birth Half-breed  --> Look 13. BirthCreatures(Creature[0], Creature[1], nCreaturesType)
     }
   }
@@ -564,26 +597,41 @@ function BirthCreatures(CreaturesType, Creature = Array(2)) {
   ];
   // declaration of love, if dialogues are included and parents are different (not a tree)
   if (
-    LogSwitch.Dialogs != "" &&
+    LogSwitch.Dialogs != 0 &&
     allCreatures[Creature[0]].id != allCreatures[Creature[1]].id
   )
     console.log(`${parent[0]}: - I love you! 
 ${parent[1]}: - I love you too! `);
- // id++;
+  // id++;
   let gender = rnd(2, 0) == 1 ? "female" : "male",
     age = 0,
     parent1 = Creature[0], // generation 0   id 1  gender 2  nameCr 3  age 4  lifespan 5
     parent2 = Creature[1], // parent1 6  parent2 7   Type 8   subType 9    mood 10   numInBase 11
     subType = install_TypeSubType(CreaturesType); // todo>    Entering the CreaturesType and subType of the creature --> Look 15.install_TypeSubType(nType)
   mood = switchMood(); // todo>  Check the mood of creature :)  :(  :o  --> Look 16.switchMood()
-  let newCreature=new CreatureConstructor(gender, age, parent1, parent2, CreaturesType, subType)
-  allCreatures.push(newCreature); // added the Creature object to the array
-  if (LogSwitch.typeWhoBorn != "")
+  allCreatures.push(
+    // added the Creature object to the array
+    new CreatureConstructor(
+      gender,
+      age,
+      parent1,
+      parent2,
+      CreaturesType,
+      subType
+    )
+  );
+ /* console.log(
+    allCreatures[allCreatures.length - 1].id +
+      " / " +
+      allCreatures[allCreatures.length - 1].subType
+  );*/
+  if (LogSwitch.typeWhoBorn != 0)
     // todo>    Created a description of the creature
     console.log(
       subType + " is Born !!! happy parents " + parent[0] + " and " + parent[1]
     ); // show subType who was born
-  if (LogSwitch.detaleWhoBorn != "") descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
+  if (LogSwitch.detaleWhoBorn != 0)
+    descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
 }
 
 // ! 14. Namer(gender) -   make a name: ending - depending on gender, the rest of the letters - by alternating consonants and vowels
@@ -693,7 +741,7 @@ function smile() {
 }
 // ! 19. cry()
 function cry() {
-  return "Ж:'(  wee-wee.. ";
+  return "Ж:  wee-wee.. ";
 }
 
 // ! 20. Aging()   -  growing up being on one year
@@ -708,7 +756,7 @@ function Aging() {
 function DeathСheck(i) {
   if (allCreatures[i].lifespan - allCreatures[i].age <= 0) {
     //if the life resource is more than or equal to age
-    if (LogSwitch.typeWhoDiedAge != "")
+    if (LogSwitch.typeWhoDiedAge != 0)
       console.log(
         "death " +
           allCreatures[i].subType +
