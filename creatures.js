@@ -32,7 +32,7 @@ Water Vapor - is born with a 50/50 probability of Spirit or Water (in any condit
 
 /**  ! 1. initial Data                 
   count of  1.cycleTimeMinutes (if "0" -> without delay) 2.lifeTimeMenagerieMinutes)  3.lifespanCreature
-  typeCreature: Woods, WoodFemales, Steels, SteelFemales, Spirits, SpiritFemale
+  CreaturesType: Woods, WoodFemales, Steels, SteelFemales, Spirits, SpiritFemale
   typeWaterCreature:   WaterIce   WaterIceFemale   Water   WaterIceFemale  WaterSream   15.WaterSream */
 
 let InstalCreaturesData = {
@@ -260,7 +260,7 @@ function statistic() {
   }
 }
 
-// ! 6. logstat(s)  - statistics log by type
+// ! 6. logstat(statistic)  - statistics log by type
 function logstat(statistic) {
   console.log(`All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
 Wood-${statistic.wood} f-${statistic.woodFem}/m-${statistic.woodMale}
@@ -313,7 +313,7 @@ function InstallCreatures() {
   );
 }
 
-function BornType(countAll, countFem, TypeCreature, subTypeCreature) {
+function BornType(countAll, countFem, CreaturesType, subTypeCreature) {
   //  Сreating a group of creatures of this type
   // countFem- number of females of this type
   //setting all initial parameters for each created creature
@@ -321,16 +321,15 @@ function BornType(countAll, countFem, TypeCreature, subTypeCreature) {
     let gender = CreatureOfType <= countFem ? "female" : "male", // for the new creatures
       age = 1, //                                          identified distinctive properties
       parent = "God",
-      Type = TypeCreature,
       subType = subTypeCreature;
-    allCreatures.push(new Creature(gender, age, parent, "", Type, subType)); // added the Creature object to the array
+    allCreatures.push(new CreatureConstructor(gender, age, parent, parent, CreaturesType, subType)); // added the Creature object to the array
     if (LogSwitch.ParametersNewCreature != "")
       descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
   }
   // id--; // removed the last redundant addition to the creature counter
 }
 
-function Creature(gender, age, parent1, parent2, Type, subType) {
+function CreatureConstructor(gender, age, parent1, parent2, CreaturesType, subType) {
   (this.generation = generation), // 0
     (this.id = id), // 1
     (this.gender = gender); // 2 // set gender
@@ -339,7 +338,7 @@ function Creature(gender, age, parent1, parent2, Type, subType) {
     (this.lifespan = InstalCreaturesData.lifespanCreature), // 5
     (this.parent1 = parent1), // 6
     (this.parent2 = parent2), // 7
-    (this.Type = Type), // 8
+    (this.CreaturesType = CreaturesType), // 8
     (this.subType = subType), // 9
     (this.mood = switchMood()), // todo>    Check the mood of creature :)  :(  :o   --> Look 16.switchMood() // 10
     (this.numInBase = 0); //11 - empty cell for now, used to randomly distribute objects of an array of creatures
@@ -439,8 +438,8 @@ ${NameSubType2}: -Hello ${hi1}${NameSubType1}! ${NewSmile2}`;
 function lifespanFunc(Creature = Array(2)) {
   // 1-Wood 2-Steel 3-Spirit 4-Water  ;  4+1 1-2  2+3- 2-4  3+1  4-3 (1st can give birth  after die -> 1st havn't  "+")
   let coupleType =
-    String(allCreatures[Creature[0]].TypeCreature) +
-    String(allCreatures[Creature[1]].TypeCreature); // give combination of types
+    String(allCreatures[Creature[0]].CreaturesType) +
+    String(allCreatures[Creature[1]].CreaturesType); // give combination of types
   let lifespan = [0, 0]; // label for increase/decrease of creature1 & creature2 lifespan
   switch (
     coupleType // if the types of interlocutors make up any of the combinations, // then the life span of the specified creature will change
@@ -532,11 +531,10 @@ function checkBirth(Creature = Array(2)) {
     allCreatures[Creature[1]].age > 2 &&
     allCreatures[Creature[0]].gender != allCreatures[Creature[1]].gender; // and gender are different
   if (if1) {
-    let if2 = allCreatures[Creature[0]].Type == allCreatures[Creature[1]].Type; // condition 2: if types of creatures is equal -
+    let if2 = allCreatures[Creature[0]].CreaturesType == allCreatures[Creature[1]].CreaturesType; // condition 2: if types of creatures is equal -
     if (if2) {
-      let subType =
-        allCreatures[Creature[0]].Type == 4 ? 4 + rnd(3, -1) : type1; // if type 4 (water), than randomly choose subTipe Ice/Water/Sream for newborn else easy type for newborn
-      BirthCreatures(allCreatures[Creature[0]].Type, [
+      let subType =install_TypeSubType(allCreatures[Creature[0]].CreaturesType); 
+      BirthCreatures(allCreatures[Creature[0]].CreaturesType, [
         Creature[0],
         Creature[1],
       ]); // "Birth Same rase!" // todo>   Birth   --> Look 13. BirthCreatures(Creature[0], Creature[1], nType)
@@ -549,16 +547,16 @@ function checkBirth(Creature = Array(2)) {
         (st2 == "spirit" && st1 == "waterSream"); //if "Half-breed!"
       if (if3) {
         // Rase-probability 50/50 "spirit" / "water"
-       Type = rnd(2, -1) == 1 ? "spirit" :"water" ; // 3 -spirit / 4-water (subType - randomly choose subTipe - Ice/Water/Sream)
-      }
-      BirthCreatures(Type, [Creature[0], Creature[1]]); 
-      // todo>   Birth Half-breed  --> Look 13. BirthCreatures(Creature[0], Creature[1], nType)
+       CreaturesType = rnd(2, -1) == 1 ? "spirit" :"water" ; // 3 -spirit / 4-water (subType - randomly choose subTipe - Ice/Water/Sream)
+      BirthCreatures(CreaturesType, [Creature[0], Creature[1]]); 
+    }
+      // todo>   Birth Half-breed  --> Look 13. BirthCreatures(Creature[0], Creature[1], nCreaturesType)
     }
   }
 }
 
-// ! 13 BirthCreatures(nType, Creature=Array(2))
-function BirthCreatures(Type, Creature = Array(2)) {
+// ! 13 BirthCreatures(CreaturesType, Creature=Array(2))
+function BirthCreatures(CreaturesType, Creature = Array(2)) {
   let parent = [
     // parents name-type for logs :
     allCreatures[Creature[0]].name + "-" + allCreatures[Creature[0]].subType,
@@ -576,9 +574,10 @@ ${parent[1]}: - I love you too! `);
     age = 0,
     parent1 = Creature[0], // generation 0   id 1  gender 2  nameCr 3  age 4  lifespan 5
     parent2 = Creature[1], // parent1 6  parent2 7   Type 8   subType 9    mood 10   numInBase 11
-    subType = install_TypeSubType(Type); // todo>    Entering the Type and subType of the creature --> Look 15.install_TypeSubType(nType)
+    subType = install_TypeSubType(CreaturesType); // todo>    Entering the CreaturesType and subType of the creature --> Look 15.install_TypeSubType(nType)
   mood = switchMood(); // todo>  Check the mood of creature :)  :(  :o  --> Look 16.switchMood()
-  allCreatures.push(new Creature(gender, age, parent1, parent2, Type, subType)); // added the Creature object to the array
+  let newCreature=new CreatureConstructor(gender, age, parent1, parent2, CreaturesType, subType)
+  allCreatures.push(newCreature); // added the Creature object to the array
   if (LogSwitch.typeWhoBorn != "")
     // todo>    Created a description of the creature
     console.log(
@@ -646,12 +645,12 @@ function Namer(gender) {
   return nameCreature;
 }
 
-// ! 15. install_TypeSubType(nType)    -  entering the type and subtype of the creature
-function install_TypeSubType(Type) {
+// ! 15. install_TypeSubType(CreaturesType)    -  entering the type and subtype of the creature
+function install_TypeSubType(CreaturesType) {
   let subType; // entering the subtype of the creature depending on the conditional Type
-  switch (Type) {
+  switch (CreaturesType) {
     case ("wood", "steel", "spirit"):
-      return (subType = Type);
+      return (subType = CreaturesType);
     case "water":
       subType = rnd(3, 0);
       switch (subType) {
@@ -718,11 +717,11 @@ function DeathСheck(i) {
           " it was " +
           allCreatures[i].age
       ); // show type who died  / if LogSwitch != ""
-    if (allCreatures[i].Type == 1) {
+    if (allCreatures[i].CreaturesType == 1) {
       // if dying type==wood
       if (rnd(2, -1) == 1) {
         // then 50% probability - with death of wood -> borning wood.
-        BirthCreatures(allCreatures[i].Type, [i, i]); // Same rase // todo>   Birth --> Look 13. BirthCreatures(Parent1, Parent1, nType=1/wood/)
+        BirthCreatures(allCreatures[i].CreaturesType, [i, i]); // Same rase // todo>   Birth --> Look 13. BirthCreatures(Parent1, Parent1, CreaturesType=1/wood/)
       }
     }
     allCreatures[i] = allCreatures[allCreatures.length - 1]; // rewrote the last creature in the array to the place of the deceased,
