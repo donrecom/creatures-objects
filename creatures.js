@@ -5,11 +5,6 @@ The menagerie includes 4 types of creatures:
 1-Wooden, 2-Steel, 3-Spiritual, 4-Water.
 Water (type 4) creatures are in 3 states (subtypes):
 Ice, Water, Steam, which change chaotically every cycle.
-Creatures are male and female.
-? Initial data can be entered in "function initialData ()" (edit values ​​are allowed)
-? InstalCreatorsData1 = [1.cycleTime (minutes), 2.lifeTimeMenagerie (minutes), 3.lifespan]
-? InstalCreatorsData2 = [4.Wood, 5.WoodFemale, 6.Steel, 7.SteelFemale, 8.Spirit, 9.SpiritFemale]
-? InstalCreatorsData3 = [10. WaterIce 11.WaterIceFemale, 12.Water, 13.WaterIceFemale, 14.WaterSream, 15.WaterSream];
 We enter, respectively, the initial number of creatures of each type, subtype (for Water) and females.
 The male is automatically determined from the difference between the general and the female.
 Each creature has a male or female name at birth, respectively.
@@ -35,39 +30,32 @@ they have a "child". In the same situation, but the type of one is Spirit, the o
 Water Vapor - is born with a 50/50 probability of Spirit or Water (in any condition).
 */
 
-/** ! 1. initialData()                    (after declare global counters) */
-function initialData() {
-  // count of              1.cycleTime (minutes) (if "0" -> without delay) 2.lifeTimeMenagerie  (minutes)  3.lifespan
-  let InstalCreatorsData1 = [0, 1, 10];
-  // typeCreature:         4.Wood   5.WoodFemale   6.Steel   7.SteelFemale   8.Spirit     9.SpiritFemale
-  let InstalCreatorsData2 = [12, 6, 12, 6, 12, 6];
-  //  typeWaterCreature:   10. WaterIce   11.WaterIceFemale   12.Water   13.WaterIceFemale  14.WaterSream   15.WaterSream
-  InstalCreatorsData3 = [4, 2, 4, 2, 4, 2];
-  // Log parts switches. Put something in quotation marks to include the corresponding log.
-  // 0. write Generation   1. write statistic for year
-  // 2. statistic every 5-th generation & statistic when zeroing amount of any type
-  // 3. display the parameters of the new creature
-  // 4. dialogs   5. type who died   6.  detale who was born   7. type who died
-  //            0 , 1,  2, 3 , 4 , 5 , 6 , 7
-  LogSwitch = ["0", "1", "2", "3", "4", "5", "6", "7"];
-  let sum = 0;
-  for (i = 0; i < 6; i = i + 2) {
-    sum += InstalCreatorsData2[i];
-    sum += InstalCreatorsData3[i];
-  }
-  InstalCreatorsData = InstalCreatorsData1.concat(
-    InstalCreatorsData2,
-    InstalCreatorsData3,
-    [sum]
-  ); // todo> array of initial data is created
-}
-
+/**  ! 1. initial Data                 
+  count of  1.cycleTimeMinutes (if "0" -> without delay) 2.lifeTimeMenagerieMinutes)  3.lifespanCreature
+  typeCreature: Woods, WoodFemales, Steels, SteelFemales, Spirits, SpiritFemale
+  typeWaterCreature:   WaterIce   WaterIceFemale   Water   WaterIceFemale  WaterSream   15.WaterSream */
+  
+  let InstalCreatorsData = {cycleTimeMinutes:0, lifeTimeMenagerieMinutes:1, lifespanCreature:10,
+  Woods:12, WoodFemales:6, Steels:12, SteelFemales:6, Spirits:12, SpiritFemale:6,
+  WaterIce:4, WaterIceFemale:2, WaterLiquid:4, WaterLiquidFemale:2, WaterSream:4,WaterSreamFemale:2};
+  { 
+  /** { Log parts switches. Put something in quotation marks to include the corresponding log.
+   0. write Generation   1. write statistic for year
+   2. statistic every 5-th generation & statistic when zeroing amount of any type
+   3. display the parameters of the new creature
+   4. dialogs   5. type who born   6.  detale who was born   7. type who died & age
+              0 , 1,  2, 3 , 4 , 5 , 6 , 7 
+  */}
+  LogSwitch = {Generation:1, statisticForYear:1, StatEvery5genOrZeroing:1, 
+  ParametersNewCreature:1, Dialogs:1, typeWhoBorn:1, detaleWhoBorn:1, typeWhoDiedAge:1};
+  let sum = Woods+Steels+Spirits+WaterIce+Water+WaterSream;
+  
 // ! 2.  BEGIN of the Program
 {
   console.log("Big Bang !!!");
   var InstalCreatorsData = []; // todo>   We declare global counters and data arrays :
   var allCreatures = []; // array for menagerie creatures
-  var stat0 = [1, 1, 1, 1, 1, 1]; // array-label for nullified array of statistic
+  var labelZeroingType= {wood:1,steel: 1, spirit: 1, water:1}; // array-label for nullified tipes 
   var generation = 0; // for 1-st generation
   var id = 0; // counter of creatur
   var nType = 1, // counter of Types & subTypes of creatures
@@ -79,7 +67,7 @@ function initialData() {
 // ! 3. timerOfWarld()
 function timerOfWarld() {
   // todo>   the time of civilization flows here, the cycle time and the life time of the menagerie are set until the End of the World
-  if (InstalCreatorsData[0] == 0) {
+  if (InstalCreatorsData.cycleTimeMinutes == 0) {
     // if time-interval==0 , then easy cycle
     for (nc = 1; nc < 10000000; nc++) {
       newYear(); // todo>     year after year --> Look newYear()
@@ -88,9 +76,9 @@ function timerOfWarld() {
     // else turn on the cycle timer
     let timer = setInterval(() => newYear(), InstalCreatorsData[0] * 60 * 1000); // repeat newYear after "cycleTime" minutes
     setTimeout(() => {
-      clearInterval(timer); // and set the End of the World
-      console.log("End of the Warld !");
-    }, InstalCreatorsData[1] * 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
+        clearInterval(timer); // and set the End of the World
+        console.log("End of the Warld !");
+      }, InstalCreatorsData[1] * 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
   }
 }
 
@@ -101,88 +89,92 @@ function newYear() {
   } else {
     Life(); // todo>        if it's not the first time --> Look 8.Life()
   }
-  if (LogSwitch[0] != "") console.log("Generation " + generation); // Show current number Generation (cycle,year) / if LogSwitch!=""
-  if (LogSwitch[1] != "") statistic(); // todo>     show statistics of the past year --> Look 5.statistic()  /  if LogSwitch!=""
+  if (LogSwitch.Generation != "") console.log("Generation " + generation); // Show current number Generation (cycle,year) / if LogSwitch!=""
+  if (LogSwitch.statisticForYear != "") statistic(); // todo>     show statistics of the past year --> Look 5.statistic()  /  if LogSwitch!=""
   generation++;
 }
 
 // ! 5. statistic()   -> show statistics of the past year
 function statistic() {
-  let s = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+  let statistic = {female:0, male:0, wood: 0, woodFem:0, woodMale:0, steel:0, steelFem:0, steelMale:0, 
+    spirit: 0,spiritFem: 0,spiritMale:0, water:0, waterFem:0, waterMale:0,
+    waterIce: 0, waterIceFem:0, waterIceMale :0, waterLiquid:0, waterLiquidFem:0,waterLiquidMale: 0,
+    waterSream: 0, waterSreamFem:0,waterSreamMale: 0};
+    {
   for (let i = 0; i < allCreatures.length; i++) {
     // go through all the creatures of the main array of creatures
     if (allCreatures[i][2] == "female") {
-      s[0]++; // counter female
+      statistic.female++; // counter female
     } else {
-      s[1]++; // counter male
+      statistic.male++; // counter male
     }
     switch (allCreatures[i][8]) {
       case 1:
         {
-          s[2]++; // counter type of Wood (& female, & male)
+          statistic.wood++; // counter type of Wood (& female, & male)
           if (allCreatures[i][2] == "female") {
-            s[3]++;
+            statistic.woodFem++;
           } else {
-            s[4]++;
+            statistic.woodMale++;
           }
         }
         break;
       case 2:
         {
-          s[5]++; // counter type of Steel (& female, & male)
+          statistic.steel++; // counter type of Steel (& female, & male)
           if (allCreatures[i][2] == "female") {
-            s[6]++;
+            statistic.steelFem++;
           } else {
-            s[7]++;
+            statistic.steelMale++;
           }
         }
         break;
       case 3:
         {
-          s[8]++; // counter type of Spirite (& female, & male)
+          statistic.spirit++; // counter type of spirit (& female, & male)
           if (allCreatures[i][2] == "female") {
-            s[9]++;
+            statistic.spiritFem++;
           } else {
-            s[10]++;
+            statistic.spiritMale++;
           }
         }
         break;
       case 4:
         {
-          s[11]++; // counter type of Water  (& female, & male)
+          statistic.water++; // counter type of Water  (& female, & male)
           if (allCreatures[i][2] == "female") {
-            s[12]++;
+            statistic.waterFem++;
           } else {
-            s[13]++;
+            statistic.waterMale++;
           }
           switch (allCreatures[i][9]) {
             case "waterIce":
               {
-                s[14]++; // counter subType of waterIce (& female, & male)
+                statistic.waterIce++; // counter subType of waterIce (& female, & male)
                 if (allCreatures[i][2] == "female") {
-                  s[15]++;
+                  statistic.WaterIceFemale++;
                 } else {
-                  s[16]++;
+                  statistic.waterLiquidMale++;
                 }
               }
               break;
             case "water":
               {
-                s[17]++; // counter subType of water (& female, & male)
+                statistic.waterLiquid++; // counter subType of water (& female, & male)
                 if (allCreatures[i][2] == "female") {
-                  s[18]++;
+                  statistic.waterLiquidFem++;
                 } else {
-                  s[19]++;
+                  statistic.waterLiquidMale++;
                 }
               }
               break;
             case "waterSream":
               {
-                s[20]++; // counter subType of waterSream (& female, & male)
+                waterSream++; // counter subType of waterSream (& female, & male)
                 if (allCreatures[i][2] == "female") {
-                  s[21]++;
+                  waterSreamFem++;
                 } else {
-                  s[22]++;
+                  waterSreamMale++;
                 }
               }
               break;
@@ -191,148 +183,98 @@ function statistic() {
         break;
     }
   }
-  doStat = 0; // Label for nullified array of statistic =0
-  if (stat0[0] == 1 && s[2] == 0) {
+  let doStat = 0; // Label for nullified array of statistic =0
+  if (labelZeroingType.wood == 1 && statistic.wood == 0) {
     // track the moment of zeroing the number of some kind of creatures for an extraordinary output of statistical data
-    stat0[0] = 0; // for Wood-type
+    labelZeroingType.wood = 0; // for Wood-type Label for nullified
     doStat = 1; // label for ivent
   }
-  if (stat0[1] == 1 && s[5] == 0) {
-    stat0[1] = 0; // for Steel-type
+  if (labelZeroingType.steel== 1 && statistic.steel == 0) {
+    labelZeroingType.steel = 0; // for Steel-type Label for nullified
     doStat = 1;
   }
-  if (stat0[2] == 1 && s[8] == 0) {
-    // for Spitit-type
-    stat0[2] = 0;
+  if (labelZeroingType.spirit == 1 && statistic.spirit == 0) {
+    // for Spitit-type Label for nullified
+    labelZeroingType.spirit = 0;
     doStat = 1;
   }
-  if (stat0[3] == 1 && s[11] == 0) {
-    // for Water-type
-    stat0[3] = 0;
+  if (labelZeroingType.water == 1 && statistic.water == 0) {
+    // for Water-type Label for nullified
+    labelZeroingType.water = 0;
     doStat = 1;
   }
-  // if LogSwitch[2]!=""
-  // --> Write statistic every 5-th generation & statistic when zeroing amount of any type of creatures
-  //     otherwise --> Write all statistics every time.
-  if (LogSwitch[2] != "") {
+
+  if (LogSwitch.StatEvery5genOrZeroing != "") {
+    // --> Write statistic every 5-th generation & statistic when zeroing amount of any type of creatures
     if (generation % 5 == 0 || doStat == 1) logstat(s);
   } else {
+    // otherwise --> Write all statistics every time.
     logstat(s);
   }
   // todo>    Result print to console --> Look 6.logstat(s)
 }
+}
 
 // ! 6. logstat(s)  - statistics log by type
 function logstat(s) {
-  console.log(
-    "All-" +
-      allCreatures.length +
-      " f-" +
-      s[0] +
-      "/m-" +
-      s[1] +
-      "\n" +
-      "Wood-" +
-      s[2] +
-      " f-" +
-      s[3] +
-      "/m-" +
-      s[4] +
-      "\n" +
-      "Steel-" +
-      s[5] +
-      " f-" +
-      s[6] +
-      "/m-" +
-      s[7] +
-      "\n" +
-      "Spirit-" +
-      s[8] +
-      " f-" +
-      s[9] +
-      "/m-" +
-      s[10] +
-      "\n" +
-      "Water-" +
-      s[11] +
-      " f-" +
-      s[12] +
-      "/m-" +
-      s[13] +
-      "\n" +
-      "waterIce-" +
-      s[14] +
-      " f-" +
-      s[15] +
-      "/m-" +
-      s[16] +
-      "\n" +
-      "water-" +
-      s[17] +
-      " f-" +
-      s[18] +
-      "/m-" +
-      s[19] +
-      "\n" +
-      "WaterSream-" +
-      s[20] +
-      " f-" +
-      s[21] +
-      "/m-" +
-      s[22] +
-      "\n"
+  console.log(`All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
+Wood-${statistic.wood} f-${statistic.woodFem}/m-${statistic.woodMale}
+Steel-${statistic}.steel} f-${statistic.steelFem}/m-${statistic.steelMale}
+Spirit-${statistic.spirit} f-${statistic.spiritFem}/m-${statistic.spiritMale}
+Water-${statistic.water} f-${statistic.waterFem}/m-${statistic.waterMale}
+Ice water-${statistic.waterIce} f-${statistic.waterIceFemale}/m-${statistic.waterIceMale}
+Liquid water-${statistic}.waterLiquid} f-${statistic.waterLiquidFem}/m-${statistic.waterLiquidMale}
+WaterSream-${statistic.waterSream} f-${statistic.waterSreamFem}/m-${statistic.waterSreamMale}
+`
   );
 }
 
 //! 7.  InstallCreatures()  - creating an initial set
 function InstallCreatures() {
-  // of creatures based on the initial data in initialData () at program start,
-  //as well as setting all initial parameters for each created creature
-  let gend = "",
-    nameCr = "",
-    age = 1,
-    lifespan = 10,
-    parent1 = 0,
-    parent2 = 0;
-  for (InstDat = 3; InstDat < 14; InstDat += 2) {
-    countOfType = InstalCreatorsData[InstDat]; // memorized the number of creatures of this type
-    countOfFam = InstalCreatorsData[InstDat + 1]; // number of females of this type
-    for (CreatorOfType = 1; CreatorOfType <= countOfType; CreatorOfType++) {
-      //  Сreating a group of creatures of this type
-      gend = CreatorOfType <= countOfFam ? "female" : "male"; // set gender
-      nameCr = Namer(gend); // todo>    Make a name: ending - depending on gender  --> Look 14. Namer(gender)
-      subType = install_TypeSubType(nType); // todo>    Entering the Type and subType of the creature --> Look 15.install_TypeSubType(nType)
-      mood = switchMood(); // todo>    Check the mood of creature :)  :(  :o   --> Look 16.switchMood()
-      numInBase = 0; // numInBase -  cell is used to randomly distribute objects of an array of creatures
-      let instCr = [
-        // todo>    Created a description of the creature
-        generation, // 0
-        id, // 1
-        gend, // 2
-        nameCr, // 3
-        age, // 4
-        lifespan, // 5
-        parent1, // 6
-        parent2, // 7
-        Type, // 8
-        subType, // 9
-        mood, // 10
-        numInBase, //11 - empty cell for now
-      ];
-      if (LogSwitch[3] != "") descriptionCreature(instCr); // display the parameters of the new creature / if LogSwitch[3]!=""
-      allCreatures.push(instCr); // added a creature to the array of creatures
-      id++; // +1 to creature counter
+  BornType(InstalCreatorsData.Woods,InstalCreatorsData.WoodFemales,"wood","wood");
+  BornType(InstalCreatorsData.Steels,InstalCreatorsData.SteelFemales,"steel","steel");
+  BornType(InstalCreatorsData.Spirits,InstalCreatorsData.SpiritFemale,"spirit","spirit");
+  BornType(InstalCreatorsData.WaterIce,InstalCreatorsData.WaterIceFemale,"water","ice");
+  BornType(InstalCreatorsData.WaterLiquid,InstalCreatorsData.WaterLiquidFemale,"water","liquid");
+  BornType(InstalCreatorsData.WaterSream,InstalCreatorsData.WaterSreamFemale,"water","sream");
+}
+
+  function  BornType(countAll,countFem,TypeCreature,subTypeCreature){//  Сreating a group of creatures of this type
+  // countFem- number of females of this type
+  //setting all initial parameters for each created creature 
+    for (CreatorOfType = 1; CreatorOfType <= countAll; CreatorOfType++) {
+      let gender = CreatorOfType <= countFem ? "female" = "male",
+      age=1,
+      parent="God",
+      Type=TypeCreature,
+      subType=subTypeCreature; 
+      (`${Creature}_${id}`) = new Creature(gender,age,parent,"",Type,subType);
     }
-    nType++; // go to the next type (subtype)
-  }
-  id--; // removed the last redundant addition to the creature counter
+ // id--; // removed the last redundant addition to the creature counter
+}
+
+function Creature(gender,age,parent1,parent2,Type,subType)  {
+  this.generation=generation, // 0
+  this.id=id, // 1
+  this.gender=gender// 2 // set gender
+  this.name= Namer(this.gender), // todo>    Make a name= ending - depending on gender  --> Look 14. Namer(gender) // 3
+  this.age=age, // 4
+  this.lifespan= InstalCreatorsData.lifespanCreature, // 5
+  this.parent1=parent1, // 6
+  this.parent2=parent2, // 7
+  this.Type=TypeCreature, // 8
+  this.subType=subTypeCreature, // 9
+  this.mood=switchMood(), // todo>    Check the mood of creature :)  :(  :o   --> Look 16.switchMood() // 10
+  this.numInBase=0 //11 - empty cell for now, used to randomly distribute objects of an array of creatures
+  if (LogSwitch.ParametersNewCreature!= "") descriptionCreature(`${Creature}_${id}`); // display the parameters of the new creature / if LogSwitch !=""
+  id++; // +1 to creature counter
 }
 
 //! 7.1 descriptionCreature(instCr=Array(12))   -   The description appears creatures
-function descriptionCreature(instCr = Array(12)) {
-  let txt = `A ${instCr[9]}-${instCr[2]} ${instCr[3]} was born in generation ${instCr[0]}. `;
-  txt1 = instCr[2] == "female" ? "She" : "Hi";
-  txt += `${txt1} was № ${instCr[1]} of all. Now their ${allCreatures.length}.  ${txt1} said: ${instCr[10]}`;
+function descriptionCreature(creator) {
+  let txt = `A ${creator.subTypeCreature}-${creator.gender} ${creator.name} was born in generation ${creator.generation}. `;
+  txt1 = creator.gender == "female" ? "She" : "Hi";
+  txt += `${txt1} was № ${creator.id} of all. Now their ${allCreatures.length}.  ${txt1} said: ${creator.mood}`;
   console.log(txt);
 }
 
@@ -370,10 +312,10 @@ function mixCreatures() {
 
 // ! 10 meetingtolk(Creator=Array(2))
 function meetingtolk(Creator = Array(2)) {
-  if (LogSwitch[4] != "") historyWrite([Creator[0], Creator[1]]); // Сompose meeting history // todo> --> Look   historyWrite (Creator=Array(2))
+  if (LogSwitch.Dialogs != "") historyWrite([Creator[0], Creator[1]]); // Сompose meeting history // todo> --> Look   historyWrite (Creator=Array(2))
   allCreatures[Creator[0]][10] = switchMood(); // mood 1 changes when thay meet  :)  :(  :o  --> Look 16.switchMood()
   allCreatures[Creator[1]][10] = switchMood(); // mood 2 changes  --> Look 16.switchMood()
-  if (LogSwitch[4] != "") DialogWrite([Creator[0], Creator[1]]); // Сompose meeting dialog // todo> --> Look   DialogWrite (Creator=Array(2))
+  if (LogSwitch.Dialogs != "") DialogWrite([Creator[0], Creator[1]]); // Сompose meeting dialog // todo> --> Look   DialogWrite (Creator=Array(2))
 }
 
 // ! 10.1 historyWrite(Creator=Array(2))    -   Сompose meeting history
@@ -473,7 +415,7 @@ let coupleType =
       break;
   }
 
-  if (LogSwitch[4] != "") {
+  if (LogSwitch.Dialogs != "") {
     let dialog = "";
     for (let j = 0; j < Creator.length; j++) {
       if (lifespan[j] != 0) {
@@ -539,7 +481,7 @@ function BirthCreatures(nType, Creator = Array(2)) {
     allCreatures[Creator[1]][3] + "-" + allCreatures[Creator[1]][9],
   ];
   // declaration of love, if dialogues are included and parents are different (not a tree)
-  if (LogSwitch[4] != ""&&allCreatures[Creator[0]][1]!=allCreatures[Creator[0]][1])
+  if (LogSwitch.Dialogs != ""&&allCreatures[Creator[0]][1]!=allCreatures[Creator[0]][1])
     console.log(`${parent[0]}: - I love you! 
 ${parent[1]}: - I love you too! `);
   id++;
@@ -566,11 +508,11 @@ ${parent[1]}: - I love you too! `);
     mood, // 10
     numInBase, //11
   ];
-  if (LogSwitch[5] != "")
+  if (LogSwitch.typeWhoBorn != "")
     console.log(
       subType + " is Born !!! happy parents " + parent[0] + " and " + parent[1]
     ); // show subType who was born
-  if (LogSwitch[6] != "") descriptionCreature(instCr); // show detale of the new creature / if LogSwitch[6]!=""
+  if (LogSwitch.detaleWhoBorn != "") descriptionCreature(instCr); // show detale of the new creature / if LogSwitch!=""
   allCreatures.push(instCr); // added a creature to the array of creatures
 }
 
@@ -713,7 +655,7 @@ function Aging() {
 function DeathСheck(i) {
   if (allCreatures[i][5] - allCreatures[i][4] <= 0) {
     //if the life resource is more than or equal to age
-    if (LogSwitch[7] != "")
+    if (LogSwitch.typeWhoDiedAge != "")
       console.log(
         "death " +
           allCreatures[i][9] +
@@ -721,7 +663,7 @@ function DeathСheck(i) {
           allCreatures[i][3] +
           " it was " +
           allCreatures[i][4]
-      ); // show type who died  / if LogSwitch[7] != ""
+      ); // show type who died  / if LogSwitch != ""
     if (allCreatures[i][8] == 1) {
       // if dying type==wood
       if (rnd(2, -1) == 1) {
