@@ -321,6 +321,7 @@ function InstallCreatures() {
   );
 }
 
+//! 7.1 creation of the required number of types and subtypes of creatures in the zero cycle
 function BornType(countAll, countFem, CreaturesType, subType) {
   //  Сreating a group of creatures of this type
   // countFem- number of females of this type
@@ -346,7 +347,7 @@ function BornType(countAll, countFem, CreaturesType, subType) {
   }
   // id--; // removed the last redundant
 }
-
+//! 7.2 Creature object constructor
 function CreatureConstructor(
   gender,
   age,
@@ -370,7 +371,7 @@ function CreatureConstructor(
   id++; // +1 to creature counter
 }
 
-//! 7.1 descriptionCreature(instCr=Array(12))   -   The description appears creatures
+//! 7.3 descriptionCreature(instCr=Array(12))   -   The description appears creatures
 function descriptionCreature(Creature) {
   let txt = `A ${Creature.subType}-${Creature.gender} ${Creature.name} was born in generation ${Creature.generation}. `;
   txt1 = Creature.gender == "female" ? "She" : "Hi";
