@@ -35,8 +35,8 @@ Water Vapor - is born with a 50/50 probability of Spirit or Water (in any condit
   CreaturesType: Woods, WoodFem, Steels, SteelFem, Spirits, SpiritFem
   typeWaterCreature:   WaterIce   WaterIceFem   Water   WaterIceFem  WaterSream   15.WaterSream */
 
-let InstalCreaturesData = {
-  cycleTimeMinutes: 0,
+var InstalCreaturesData = {
+  cycleTimeMinutes: 0.1,
   lifeTimeMenagerieMinutes: 1,
   lifespanCreature: 10,
   Woods: 12,
@@ -80,19 +80,24 @@ let sum =
   InstalCreaturesData.WaterSream;
 
 // ! 2.  BEGIN of the Program
-{
-  console.log("Big Bang !!!");
+
+  
+ // let section = document.querySelector('section');
+//  section.innerHTML += ``;
+
+
   // var InstalCreaturesData = []; // todo>   We declare global counters and data arrays :
   var allCreatures = []; // array for menagerie creatures
   var labelZeroingType = { wood: 1, steel: 1, spirit: 1, water: 1 }; // array-label for nullified tipes
   var generation = 0; // for 1-st generation
   var id = 0; // counter of creatur
   // initialData(); // todo>   initial Data --> Look 0.initialData()
-  timerOfWarld(); // todo>   turn on the timer of cycles (years or generations) --> Look 3.timerOfWarld()
-}
+ // timerOfWarld(); // todo>   turn on the timer of cycles (years or generations) --> Look 3.timerOfWarld()
+
 
 // ! 3. timerOfWarld()
 function timerOfWarld() {
+  Log("Big Bang !!!");
   // todo>   the time of civilization flows here, the cycle time and the life time of the menagerie are set until the End of the World
   let extinction = " !!! There was an extinction of civilization !";
 
@@ -100,7 +105,7 @@ function timerOfWarld() {
   let timer = setInterval(() => {
     newYear();
     if (allCreatures.length <= 0) {
-      console.log(extinction);
+      Log(extinction);
       clearInterval(timer);
       process.exit(0);
     }
@@ -108,8 +113,14 @@ function timerOfWarld() {
 
   setTimeout(() => {
     clearInterval(timer); // and set the End of the World
-    console.log("End of the Warld !");
+    Log("End of the Warld !");
   }, InstalCreaturesData.lifeTimeMenagerieMinutes * 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
+}
+
+// ! 3.1 пишем лог
+function Log(txt){
+console.log(txt);
+ document.writeln(txt+"<br>");
 }
 
 // ! 4. newYear()
@@ -120,7 +131,7 @@ function newYear() {
     Life(); // todo>        if it's not the first time --> Look 8.Life()
   }
   if (LogSwitch.statisticForYear != 0) statistic();
-  //elseif (LogSwitch.Generation != 0) console.log("Generation " + generation);
+  //elseif (LogSwitch.Generation != 0) Log("Generation " + generation);
   // Show current number Generation (cycle,year) , statistics / if LogSwitch!=0
   generation++;
 }
@@ -269,8 +280,8 @@ function statistic() {
 
 // ! 6. logstat(statistic)  - statistics log by type
 function logstat(statistic) {
-  console.log("Generation " + generation);
-  console.log(`All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
+  Log("Generation " + generation);
+  Log(`All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
 Wood-${statistic.wood} f-${statistic.woodFem}/m-${statistic.woodMale}
 Steel-${statistic.steel} f-${statistic.steelFem}/m-${statistic.steelMale}
 Spirit-${statistic.spirit} f-${statistic.spiritFem}/m-${statistic.spiritMale}
@@ -327,7 +338,7 @@ function BornType(countAll, countFem, CreaturesType, subType) {
   // countFem- number of females of this type
   //setting all initial parameters for each created creature
   for (CreatureOfType = 1; CreatureOfType <= countAll; CreatureOfType++) {
-    if (allCreatures.length <= 5000000) {
+    if (allCreatures.length <= 5000000) { 
       let gender = CreatureOfType <= countFem ? "female" : "male", // for the new creatures
         age = 1, //                                          identified distinctive properties
         parent = "God";
@@ -376,7 +387,7 @@ function descriptionCreature(Creature) {
   let txt = `A ${Creature.subType}-${Creature.gender} ${Creature.name} was born in generation ${Creature.generation}. `;
   txt1 = Creature.gender == "female" ? "She" : "Hi";
   txt += `${txt1} was № ${Creature.id} of all. Now their ${allCreatures.length}.  ${txt1} said: ${Creature.mood}`;
-  console.log(txt);
+  Log(txt);
 }
 
 // ! 8.  Life() --> mixCreatures, meetingtolk, lifespanFunc, CheckBirth, Aging
@@ -440,7 +451,7 @@ function historyWrite(Creatures = Array(2)) {
     if (itaration < Creatures.length - 1) history = history + "\nand "; // add "and" only on the first iteration
     itaration++;
   });
-  console.log(history); // write meeting history
+  Log(history); // write meeting history
 }
 
 // ! 10.2 DialogWrite(Creature=Array(2))    -   Сompose dialog
@@ -458,7 +469,7 @@ function DialogWrite(Creature = Array(2)) {
     // creature1:-Hello "Mr./Miss"  "name creature2" - "subType creature2" ,  creature2: ... greets too
     ` ${NameSubType1}: -Hello ${hi2}${NameSubType2}! ${NewSmile1}
  ${NameSubType2}: -Hello ${hi1}${NameSubType1}! ${NewSmile2}`;
-  console.log(dialog); // write meeting dialog
+  Log(dialog); // write meeting dialog
 }
 
 // ! 11.  lifespanFunc(Creature=Array(2))
@@ -598,7 +609,7 @@ function BirthCreatures(CreaturesType, Creature = Array(2)) {
     LogSwitch.Dialogs != 0 &&
     allCreatures[Creature[0]].id != allCreatures[Creature[1]].id
   )
-    console.log(`${parent[0]}: - I love you! 
+    Log(`${parent[0]}: - I love you! 
 ${parent[1]}: - I love you too! `);
   if (allCreatures.length <= 5000000) {
     // if number not big -borning, else overflow of population
@@ -621,7 +632,7 @@ ${parent[1]}: - I love you too! `);
     );
     if (LogSwitch.typeWhoBorn != 0)
       // todo>    Created a description of the creature
-      console.log(
+      Log(
         subType +
           " is Born !!! happy parents " +
           parent[0] +
@@ -756,7 +767,7 @@ function DeathСheck(i) {
   if (allCreatures[i].lifespan - allCreatures[i].age <= 0) {
     //if the life resource is more than or equal to age
     if (LogSwitch.typeWhoDiedAge != 0)
-      console.log(
+      Log(
         "death " +
           allCreatures[i].subType +
           " " +

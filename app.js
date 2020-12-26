@@ -1,6 +1,8 @@
+function fff() {
 var person = 'Sereja'
 var msg = 'Hello ' + person + '!';
 console.log(msg);
+document.writeln(msg)
 
 o = Object.create({}, { 
     p: { value: 42 } 
@@ -31,6 +33,7 @@ creature01 = Object.create({}, {
 });
 
 console.log("Привет " + creature01.type + " " + creature01.name);
+}
 
 
 // more simple syntax
