@@ -35,8 +35,8 @@ Water Vapor - is born with a 50/50 probability of Spirit or Water (in any condit
   CreaturesType: Woods, WoodFem, Steels, SteelFem, Spirits, SpiritFem
   typeWaterCreature:   WaterIce   WaterIceFem   Water   WaterIceFem  WaterSream   15.WaterSream */
 
-var InstalCreaturesData = {
-  cycleTimeMinutes: 0.1,
+let InstalCreaturesData = {}
+/*  cycleTimeMinutes: 0.1,
   lifeTimeMenagerieMinutes: 1,
   lifespanCreature: 10,
   Woods: 12,
@@ -52,6 +52,7 @@ var InstalCreaturesData = {
   WaterSream: 4,
   WaterSreamFem: 2,
 };
+*/
 {
   /** { Log parts switches. Put something in quotation marks to include the corresponding log.
    0. write Generation   1. write statistic for year
@@ -86,18 +87,43 @@ let sum =
 //  section.innerHTML += ``;
 
 
-  // var InstalCreaturesData = []; // todo>   We declare global counters and data arrays :
-  var allCreatures = []; // array for menagerie creatures
-  var labelZeroingType = { wood: 1, steel: 1, spirit: 1, water: 1 }; // array-label for nullified tipes
-  var generation = 0; // for 1-st generation
-  var id = 0; // counter of creatur
+  // let InstalCreaturesData = []; // todo>   We declare global counters and data arrays :
+  let allCreatures = []; // array for menagerie creatures
+  let labelZeroingType = { wood: 1, steel: 1, spirit: 1, water: 1 }; // array-label for nullified tipes
+  let generation = 0; // for 1-st generation
+  let id = 0; // counter of creatur
   // initialData(); // todo>   initial Data --> Look 0.initialData()
  // timerOfWarld(); // todo>   turn on the timer of cycles (years or generations) --> Look 3.timerOfWarld()
 
 
 // ! 3. timerOfWarld()
-function timerOfWarld() {
-  Log("Big Bang !!!");
+function timerOfWarld(cycleTimeMinutes,
+  lifeTimeMenagerieMinutes,lifespanCreature,Woods,WoodFem,Steels,SteelFem,Spirits,
+  SpiritFem,WaterIce,WaterIceFem,WaterLiquid,WaterLiquidFem,WaterSream,WaterSreamFem
+) {
+    /**  ! 1. initial Data                 
+      count of  1.cycleTimeMinutes (if "0" -> without delay) 2.lifeTimeMenagerieMinutes)  3.lifespanCreature
+      CreaturesType: Woods, WoodFem, Steels, SteelFem, Spirits, SpiritFem
+      typeWaterCreature:   WaterIce   WaterIceFem   Water   WaterIceFem  WaterSream   15.WaterSream */
+    
+      let InstalCreaturesData = {
+        cycleTimeMinutes: cycleTimeMinutes,
+        lifeTimeMenagerieMinutes: lifeTimeMenagerieMinutes,
+        lifespanCreature: lifespanCreature,
+        Woods: Woods,
+        WoodFem: WoodFem,
+        Steels: Steels,
+        SteelFem: SteelFem,
+        Spirits: Spirits,
+        SpiritFem: SpiritFem,
+        WaterIce: WaterIce,
+        WaterIceFem: WaterIceFem,
+        WaterLiquid: WaterLiquid,
+        WaterLiquidFem: WaterLiquidFem,
+        WaterSream: WaterSream,
+        WaterSreamFem: WaterSreamFem,
+      }
+      Log("Big Bang !!!");
   // todo>   the time of civilization flows here, the cycle time and the life time of the menagerie are set until the End of the World
   let extinction = " !!! There was an extinction of civilization !";
 
