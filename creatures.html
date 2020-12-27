@@ -4,7 +4,58 @@
     <title>Зверинец</title>
   </head>
   <body>
-    <script src="./creatures.js"></script>
-    <p style="text-align: left"><button onclick=" timerOfWarld(43,2,231,13321)">Пуск !</button></p>
+    <scrip src="./creatures.js"></scrip>
+    <form>
+        <label>Введите параметры для зверинца:</label><br>
+        <label>Скорость прохождения года, мин. </label><input id='0' name="cycleTimeMinutes" type=number value="0.1"/> <label>мин.</label><br>
+        <label>Время жизни зверинца, мин.      </label>lifeTimeMenagerieMinutes<input id='1' name="cycleTimeMinutes" type=number value="1"/><label>мин.</label><br>
+        <label>Базовая продолжительность жизни существа</label><input id='2' name="lifespanCreature" type=number value="10"/><br>
+        <br>
+        <label>Деревянных</label><input id='3' name="Woods" type=number value="12"/><br>
+        <label>из них женских</label><input id='4' name="WoodFem" type=number  value="6"/><br>
+        <br>
+        <label>Стальных</label><input id='5' name="Steels" type=number value="12"/><br>
+        <label>из них женских</label><input id='6' name="SteelFem" type=number value="6"/><br>
+        <br>
+        <label>Духовных</label><input id='7' name="Spirits" type=number value="12"/><br>
+        <label>из них женских</label><input id='8' name="SpiritFem" type=number value="6"/><br>
+        <br>
+        <label>Существ из рода воды :</label><br>
+        <label>Ледяных</label><input id='9' name="WaterIce" type=number value="4"/><br>
+        <label>из них женских</label><input id='10' name="WaterIceFem" type=number value="2"/><br>
+        <br>
+        <label>Жидких </label><input id='11' name="WaterLiquid" type=number value="4"/><br>
+        <label>из них женских</label><input id='12' name="WaterLiquidFem" type=number value="2"/><br>
+        <br>
+        <label>Парообразных</label><input id='13' name="WaterSream" type=number value="4"/><br>
+        <label>из них женских</label><input id='14' name="WaterSreamFem" type=number value="2"/><br>
+        
+      <!-- <input type="submit" value="Submit"/>--> 
+    </form>
+    <p style="text-align: left"><button onclick="
+timerOfWarld(
+cycleTimeMinutes=document.getElementById('0'),
+lifeTimeMenagerieMinutes=document.getElementById('1'),
+lifespanCreature=document.getElementById('2'),
+Woods=document.getElementById('3'),
+WoodFem=document.getElementById('4'),
+Steels=document.getElementById('5'),
+SteelFem=document.getElementById('6'),
+Spirits=document.getElementById('7'),
+SpiritFem=document.getElementById('8'),
+WaterIce=document.getElementById('9'),
+WaterIceFem=document.getElementById('10'),
+WaterLiquid=document.getElementById('11'),
+WaterLiquidFem=document.getElementById('12'),
+WaterSream=document.getElementById('13'),
+WaterSreamFem=document.getElementById('14')
+)">Пуск !</button></p>
+    <!--
+            let arr =Array (15);
+       for (let i=0; i<arr.length;i++){arr[i]=document.getElementById(toString(i))} 
+ 
+        cycleTimeMinutes,
+    lifeTimeMenagerieMinutes,lifespanCreature,Woods,WoodFem,Steels,SteelFem,Spirits,
+    SpiritFem,WaterIce,WaterIceFem,WaterLiquid,WaterLiquidFem,WaterSream,WaterSreamFem-->
   </body>
 </html>
