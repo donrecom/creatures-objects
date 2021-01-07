@@ -1,6 +1,14 @@
+
+console.log("Hello");
+sleep(2000).then(() => { console.log("World!"); }).then(() => {sleep(2000).then(() => { console.log("Goodbye!"); })});
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 function fff() {
 var person = 'Sereja'
-var msg = 'Hello ' + person + '!';
+var msg = 'Hello1 ' + person + '!';
 console.log(msg);
 document.writeln(msg)
 
@@ -48,7 +56,7 @@ let user = {
 };
 
 user.sayHi = function() {
-    console.log("Hello!");
+    console.log("Hello3!");
 };
 
 user.age = 31

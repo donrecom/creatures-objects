@@ -35,24 +35,7 @@ Water Vapor - is born with a 50/50 probability of Spirit or Water (in any condit
   CreaturesType: Woods, WoodFem, Steels, SteelFem, Spirits, SpiritFem
   typeWaterCreature:   WaterIce   WaterIceFem   Water   WaterIceFem  WaterSream   15.WaterSream */
 
-let InstalCreaturesData = {}
-/*  cycleTimeMinutes: 0.1,
-  lifeTimeMenagerieMinutes: 1,
-  lifespanCreature: 10,
-  Woods: 12,
-  WoodFem: 6,
-  Steels: 12,
-  SteelFem: 6,
-  Spirits: 12,
-  SpiritFem: 6,
-  WaterIce: 4,
-  WaterIceFem: 2,
-  WaterLiquid: 4,
-  WaterLiquidFem: 2,
-  WaterSream: 4,
-  WaterSreamFem: 2,
-};
-*/
+var InstalCreaturesData = {};
 {
   /** { Log parts switches. Put something in quotation marks to include the corresponding log.
    0. write Generation   1. write statistic for year
@@ -82,34 +65,28 @@ let sum =
 
 // ! 2.  BEGIN of the Program
 
-  
- // let section = document.querySelector('section');
-//  section.innerHTML += ``;
-
-
-  // let InstalCreaturesData = []; // todo>   We declare global counters and data arrays :
-  let allCreatures = []; // array for menagerie creatures
-  let labelZeroingType = { wood: 1, steel: 1, spirit: 1, water: 1 }; // array-label for nullified tipes
-  let generation = 0; // for 1-st generation
-  let id = 0; // counter of creatur
-  // initialData(); // todo>   initial Data --> Look 0.initialData()
- // timerOfWarld(); // todo>   turn on the timer of cycles (years or generations) --> Look 3.timerOfWarld()
-
+  var InstalCreaturesData = {}; // todo>   We declare global counters and data arrays :
+  var allCreatures = {}; // array for menagerie creatures
+  var lengthCreatures=0;
+  var  labelZeroingType = { wood: 1, steel: 1, spirit: 1, water: 1 }; // array-label for nullified tipes
+  var  generation = 0; // for 1-st generation
+  var  id = 0; // counter of creatur
+  timerOfWarld(0, 1,10,6,3,6,3,6,3,2,1,2,1,2,1);
 
 // ! 3. timerOfWarld()
-function timerOfWarld(cycleTimeMinutes,
-  lifeTimeMenagerieMinutes,lifespanCreature,Woods,WoodFem,Steels,SteelFem,Spirits,
-  SpiritFem,WaterIce,WaterIceFem,WaterLiquid,WaterLiquidFem,WaterSream,WaterSreamFem
-) {
+function timerOfWarld(cycleTimeMinutes, lifeTimeMenagerieMinutes,lifespanCreature,Woods,WoodFem,Steels,SteelFem,Spirits,
+  SpiritFem,WaterIce,WaterIceFem,WaterLiquid,WaterLiquidFem,WaterSream,WaterSreamFem)
+   {
     /**  ! 1. initial Data                 
       count of  1.cycleTimeMinutes (if "0" -> without delay) 2.lifeTimeMenagerieMinutes)  3.lifespanCreature
       CreaturesType: Woods, WoodFem, Steels, SteelFem, Spirits, SpiritFem
       typeWaterCreature:   WaterIce   WaterIceFem   Water   WaterIceFem  WaterSream   15.WaterSream */
-    
-      let InstalCreaturesData = {
+      //Log(ttt)
+
+      InstalCreaturesData = {
         cycleTimeMinutes: cycleTimeMinutes,
         lifeTimeMenagerieMinutes: lifeTimeMenagerieMinutes,
-        lifespanCreature: lifespanCreature,
+        lifespanCreature: parseInt(lifespanCreature),
         Woods: Woods,
         WoodFem: WoodFem,
         Steels: Steels,
@@ -123,14 +100,14 @@ function timerOfWarld(cycleTimeMinutes,
         WaterSream: WaterSream,
         WaterSreamFem: WaterSreamFem,
       }
-      Log("Big Bang !!!");
+      Log("Большой взрыв !!!"); // "Big Bang !!!"
   // todo>   the time of civilization flows here, the cycle time and the life time of the menagerie are set until the End of the World
-  let extinction = " !!! There was an extinction of civilization !";
+  let extinction = " !!! Произошло вымирание цивилизации !"; // " !!! There was an extinction of civilization !"
 
   //  turn on the cycle timer
   let timer = setInterval(() => {
-    newYear();
-    if (allCreatures.length <= 0) {
+    newYear(InstalCreaturesData);
+    if (lengthCreatures <= 0 && generation>0) {
       Log(extinction);
       clearInterval(timer);
       process.exit(0);
@@ -139,20 +116,23 @@ function timerOfWarld(cycleTimeMinutes,
 
   setTimeout(() => {
     clearInterval(timer); // and set the End of the World
-    Log("End of the Warld !");
-  }, InstalCreaturesData.lifeTimeMenagerieMinutes * 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
+    Log(`Время цивилизации существ вышло ! (${InstalCreaturesData.lifeTimeMenagerieMinutes} мин)`); // "End of the Warld !"
+  },  InstalCreaturesData.lifeTimeMenagerieMinutes* 60 * 1000); // lifeTimeMenagerie (minutes) - when to stop output
 }
 
 // ! 3.1 пишем лог
 function Log(txt){
 console.log(txt);
- document.writeln(txt+"<br>");
+ /* document.writeln(txt+"<br>"+"<br>");
+ window.scrollBy(100000, 1000000);
+ */
 }
 
+//
 // ! 4. newYear()
-function newYear() {
+function newYear(InstalCreaturesData) {
   if (generation == 0) {
-    InstallCreatures(); // todo>   if it's first Year --> Look InstallCreatures()
+    InstallCreatures(InstalCreaturesData); // todo>   if it's first Year --> Look InstallCreatures()
   } else {
     Life(); // todo>        if it's not the first time --> Look 8.Life()
   }
@@ -190,77 +170,78 @@ function statistic() {
     waterSreamMale: 0,
   };
   {
-    allCreatures.forEach((allCreat) => {
+    
+    for(let allCreat of allCreatures)  {
       // go through all the creatures of the main array of creatures
-      if (allCreat.gender == "female") {
+      if (allCreat.gender == "женщина") { //"female"
         statistic.female++; // counter female
       } else {
         statistic.male++; // counter male
       }
       switch (allCreat.CreaturesType) {
-        case "wood":
+        case "Дерево" :// "wood"
           {
             statistic.wood++; // counter type of Wood (& female, & male)
-            if (allCreat.gender == "female") {
+            if (allCreat.gender == "женщина") { // "female"
               statistic.woodFem++;
             } else {
               statistic.woodMale++;
             }
           }
           break;
-        case "steel":
+        case "Сталь": // steel
           {
             statistic.steel++; // counter type of Steel (& female, & male)
-            if (allCreat.gender == "female") {
+            if (allCreat.gender == "женщина") { // "female"
               statistic.steelFem++;
             } else {
               statistic.steelMale++;
             }
           }
           break;
-        case "spirit":
+        case "Дух":  // spirit
           {
             statistic.spirit++; // counter type of spirit (& female, & male)
-            if (allCreat.gender == "female") {
+            if (allCreat.gender == "женщина") { // "female"
               statistic.spiritFem++;
             } else {
               statistic.spiritMale++;
             }
           }
           break;
-        case "water":
+        case "Вода": // water
           {
             statistic.water++; // counter type of Water  (& female, & male)
-            if (allCreat.gender == "female") {
+            if (allCreat.gender == "женщина") {  // "female"
               statistic.waterFem++;
             } else {
               statistic.waterMale++;
             }
             switch (allCreat.subType) {
-              case "ice":
+              case "Лед": // ice
                 {
                   statistic.waterIce++; // counter subType of waterIce (& female, & male)
-                  if (allCreat.gender == "female") {
+                  if (allCreat.gender == "женщина") {  // "female"
                     statistic.waterIceFem++;
                   } else {
                     statistic.waterIceMale++;
                   }
                 }
                 break;
-              case "liquid":
+              case "Жидкость": // liquid
                 {
                   statistic.waterLiquid++; // counter subType of liquid (& female, & male)
-                  if (allCreat.gender == "female") {
+                  if (allCreat.gender == "женщина") { // "female"
                     statistic.waterLiquidFem++;
                   } else {
                     statistic.waterLiquidMale++;
                   }
                 }
                 break;
-              case "sream":
+              case "Пар": // sream
                 {
                   statistic.waterSream++; // counter subType of waterSream (& female, & male)
-                  if (allCreat.gender == "female") {
+                  if (allCreat.gender == "женщина") { // "female"
                     statistic.waterSreamFem++;
                   } else {
                     statistic.waterSreamMale++;
@@ -271,7 +252,7 @@ function statistic() {
           }
           break;
       }
-    });
+    };
     let doStat = 0; // Label for nullified array of statistic =0
     if (labelZeroingType.wood == 1 && statistic.wood == 0) {
       // track the moment of zeroing the number of some kind of creatures for an extraordinary output of statistical data
@@ -306,8 +287,23 @@ function statistic() {
 
 // ! 6. logstat(statistic)  - statistics log by type
 function logstat(statistic) {
-  Log("Generation " + generation);
-  Log(`All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
+  let txt='', lengthCreatures=Object.keys(allCreatures).length
+  Log("Шел год  " + generation); // "Generation "
+  txt+=statTxt(`На планете всего было существ`,`начало`, lengthCreatures,statistic.female,statistic.male);
+ if (lengthCreatures>0) txt+=`Из них: `
+ txt+=statTxt(`Деревянн`,``,statistic.wood,statistic.woodFem,statistic.woodMale);
+ txt+=statTxt(`Стальн`,``,statistic.steel,statistic.steelFem,statistic.steelMale);
+ txt+=statTxt(`Духовн`,``,statistic.spirit,statistic.spiritFem,statistic.spiritMale);
+ if ((statistic.water>statistic.waterIce&&statistic.waterIce>0)||
+ (statistic.water>statistic.waterLiquid&&statistic.waterLiquid>0)||
+ (statistic.water>statistic.waterSream&&statistic.waterSream>0)) 
+ {txt+=statTxt(`Водян`,``,statistic.water,statistic.waterFem,statistic.waterMale); txt+` А из водяных существ:`}
+ else if (statistic.water>0) {txt+=`Водно-`}
+ txt+=statTxt(`Ледян`,``,statistic.waterIce,statistic.waterIceFem,statistic.waterIceMale);
+ txt+=statTxt(`Жидк`,``,statistic.waterLiquid,statistic.waterLiquidFem,statistic.waterLiquidMale);
+ txt+=statTxt(`Парообразн`,``,statistic.waterSream,statistic.waterSreamFem,statistic.waterSreamMale);
+  Log(txt); 
+/* `All-${allCreatures.length} f-${statistic.female}/m-${statistic.male}
 Wood-${statistic.wood} f-${statistic.woodFem}/m-${statistic.woodMale}
 Steel-${statistic.steel} f-${statistic.steelFem}/m-${statistic.steelMale}
 Spirit-${statistic.spirit} f-${statistic.spiritFem}/m-${statistic.spiritMale}
@@ -315,47 +311,58 @@ Water-${statistic.water} f-${statistic.waterFem}/m-${statistic.waterMale}
 Ice water-${statistic.waterIce} f-${statistic.waterIceFem}/m-${statistic.waterIceMale}
 Liquid water-${statistic.waterLiquid} f-${statistic.waterLiquidFem}/m-${statistic.waterLiquidMale}
 WaterSream-${statistic.waterSream} f-${statistic.waterSreamFem}/m-${statistic.waterSreamMale}
-`);
+`*/
+}
+
+//! 6.1  text of statistics taking into account the endings and the number of creatures by gender
+function statTxt(txt1,txt2,all,Fem,Male) { 
+  let txt='',t1,t2;
+ if (all>0) {
+  if (all==1) {t1="ое"; t2="о"} else {t1="ых"; t2=""};
+// the text is different for general statistics or by type:
+   if (txt2==""){txt+=`${txt1}${t1} существ${t2} ${all}`} else {txt=`${txt1} ${all} `};
+   if (Fem==1) { txt+=`, женское`} else if (Fem>1) {txt+=`, женских ${Fem}`};
+   if (Male==1) {txt+=`, мужское`} else if (Male>1) {txt+=`, мужских ${Male}`};
+   txt+=`.\n `;
+  }
+   return txt;
 }
 
 //! 7.  InstallCreatures()  - creating an initial set
-function InstallCreatures() {
+function InstallCreatures(InstalCreaturesData) {
   BornType(
     InstalCreaturesData.Woods,
     InstalCreaturesData.WoodFem,
-    "wood",
-    "wood"
-  );
+    "Дерево",
+    "Дерево"
+  ); // wood
   BornType(
     InstalCreaturesData.Steels,
     InstalCreaturesData.SteelFem,
-    "steel",
-    "steel"
-  );
+    "Сталь",
+    "Сталь"
+  ); //steel
   BornType(
     InstalCreaturesData.Spirits,
     InstalCreaturesData.SpiritFem,
-    "spirit",
-    "spirit"
-  );
+    "Дух",
+    "Дух"
+  ); //spirit
   BornType(
     InstalCreaturesData.WaterIce,
     InstalCreaturesData.WaterIceFem,
-    "water",
-    "ice"
-  );
+    "Вода", "Лед"
+  ); // "water", "ice"
   BornType(
     InstalCreaturesData.WaterLiquid,
     InstalCreaturesData.WaterLiquidFem,
-    "water",
-    "liquid"
-  );
+    "Вода",    "Жидкость"
+  ); // "water",    "liquid"
   BornType(
     InstalCreaturesData.WaterSream,
     InstalCreaturesData.WaterSreamFem,
-    "water",
-    "sream"
-  );
+    "Вода",    "Пар"
+  ); // "water",    "sream"
 }
 
 //! 7.1 creation of the required number of types and subtypes of creatures in the zero cycle
@@ -364,11 +371,12 @@ function BornType(countAll, countFem, CreaturesType, subType) {
   // countFem- number of females of this type
   //setting all initial parameters for each created creature
   for (CreatureOfType = 1; CreatureOfType <= countAll; CreatureOfType++) {
-    if (allCreatures.length <= 5000000) { 
-      let gender = CreatureOfType <= countFem ? "female" : "male", // for the new creatures
+    lengthCreatures=Object.keys(allCreatures).length
+    if (lengthCreatures <= 5000000) { 
+      let gender = CreatureOfType <= countFem ? "женщина" : "мужчина", // for the new creatures
         age = 1, //                                          identified distinctive properties
-        parent = "God";
-      allCreatures.push(
+        parent = "Бог"; // God
+      allCreatures[`${id}`]=
         new CreatureConstructor(
           gender,
           age,
@@ -376,10 +384,9 @@ function BornType(countAll, countFem, CreaturesType, subType) {
           parent,
           CreaturesType,
           subType
-        )
-      ); // added the Creature object to the array
+        ); // added the Creature object to the array
       if (LogSwitch.ParametersNewCreature != 0)
-        descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
+        descriptionCreature(id); // display the parameters of the new creature / if LogSwitch !=""
     }
   }
   // id--; // removed the last redundant
@@ -405,15 +412,22 @@ function CreatureConstructor(
     (this.subType = subType), // 9
     (this.mood = switchMood()), // todo>    Check the mood of creature :)  :(  :o   --> Look 16.switchMood() // 10
     (this.numInBase = 0); //11 - empty cell for now, used to randomly distribute objects of an array of creatures
-  id++; // +1 to creature counter
+    lengthCreatures++
+    id++; // +1 to creature counter
 }
 
 //! 7.3 descriptionCreature(instCr=Array(12))   -   The description appears creatures
-function descriptionCreature(Creature) {
-  let txt = `A ${Creature.subType}-${Creature.gender} ${Creature.name} was born in generation ${Creature.generation}. `;
-  txt1 = Creature.gender == "female" ? "She" : "Hi";
-  txt += `${txt1} was № ${Creature.id} of all. Now their ${allCreatures.length}.  ${txt1} said: ${Creature.mood}`;
-  Log(txt);
+function descriptionCreature(id) {
+
+  let ggg=allCreatures[`${id}`].gender
+  if (allCreatures[`${id}`].gender == "женщина") {t0 = "ась"; t1 = "Она"; t2="я"; t3="ла" } else {t0 = "ся"; t1="Он"; t2="й";; t3="л" }
+    count0 = lengthCreatures>1 ? `И стало их ${lengthCreatures} на планете.` : ``;
+    let txt = `Родил${t0} ${allCreatures[`${id}`].subType}-${allCreatures[`${id}`].gender} ${allCreatures[`${id}`].name} в год ${allCreatures[`${id}`].generation}-й. `;
+    txt += `${t1} - ${allCreatures[`${id}`].id+1}-${t2} из всех. ${count0} ${t1} говори${t3}: ${allCreatures[`${id}`].mood}`;
+    Log(txt);
+    /*   let txt = `A ${Creature.subType}-${Creature.gender} ${Creature.name} was born in generation ${Creature.generation}. `;
+      txt1 = Creature.gender == "female" ? "She" : "Hi";
+      txt += `${txt1} was № ${Creature.id} of all. Now their ${allCreatures.length}.  ${txt1} said: ${Creature.mood}`; */
 }
 
 // ! 8.  Life() --> mixCreatures, meetingtolk, lifespanFunc, CheckBirth, Aging
@@ -459,9 +473,10 @@ function meetingtolk(Creature = Array(2)) {
 // ! 10.1 historyWrite(Creatures=Array(2))    -   Сompose meeting history
 function historyWrite(Creatures = Array(2)) {
   // Сompose meeting history
-  let history = "Met a ";
+  let history = "Встретились "; //"Met a "
   itaration = 0;
   Creatures.forEach((Number) => {
+    // meeting history text :
     history =
       history +
       allCreatures[Number].gender +
@@ -469,12 +484,12 @@ function historyWrite(Creatures = Array(2)) {
       allCreatures[Number].subType +
       " " +
       allCreatures[Number].name +
-      ", " +
-      allCreatures[Number].age +
-      ' y.o., who say: " ' +
+      ", чей возраст " +
+      allCreatures[Number].age + years(allCreatures[Number].age)+
+      ', кто говорил: " ' +
       allCreatures[Number].mood +
-      '" ';
-    if (itaration < Creatures.length - 1) history = history + "\nand "; // add "and" only on the first iteration
+      '" '; // ' y.o., who say: " '
+    if (itaration < Creatures.length - 1) history = history + "\nи "; // "\nand "  //  -  add "and" only on the first iteration
     itaration++;
   });
   Log(history); // write meeting history
@@ -483,19 +498,28 @@ function historyWrite(Creatures = Array(2)) {
 // ! 10.2 DialogWrite(Creature=Array(2))    -   Сompose dialog
 function DialogWrite(Creature = Array(2)) {
   // Write dialog of creatures
-  let hi1 = allCreatures[Creature[0]].gender == "male" ? "Mr. " : "Miss "; // call the interlocutor depending on gender
-  let hi2 = allCreatures[Creature[1]].gender == "male" ? "Mr. " : "Miss ";
-  let NameSubType1 =
-      allCreatures[Creature[0]].name + allCreatures[Creature[0]].subType,
-    NameSubType2 =
-      allCreatures[Creature[1]].name + allCreatures[Creature[1]].subType,
+  let hi1 = allCreatures[Creature[0]].gender == "мужчина" ? "мистер " : "мисс "; // "male" ? "Mr. " : "Miss " // call the interlocutor depending on gender
+  let hi2 = allCreatures[Creature[1]].gender == "мужчина" ? "мистер " : "мисс ";
+  let NameSubType1 =`${allCreatures[Creature[0]].name}-${allCreatures[Creature[0]].subType}`,
+    NameSubType2 =`${allCreatures[Creature[1]].name}-${allCreatures[Creature[1]].subType}`,
     NewSmile1 = allCreatures[Creature[0]].mood,
     NewSmile2 = allCreatures[Creature[1]].mood;
   let dialog =
     // creature1:-Hello "Mr./Miss"  "name creature2" - "subType creature2" ,  creature2: ... greets too
-    ` ${NameSubType1}: -Hello ${hi2}${NameSubType2}! ${NewSmile1}
- ${NameSubType2}: -Hello ${hi1}${NameSubType1}! ${NewSmile2}`;
+    ` ${NameSubType1}: -Привет ${hi2} ${NameSubType2}! ${NewSmile1}
+ ${NameSubType2}: -Приветствую ${hi1} ${NameSubType1}! ${NewSmile2}`; // -Hello
   Log(dialog); // write meeting dialog
+}
+
+//  ! 10.3 define the ending for Russian syntax
+function years(num){
+ let years0,
+  str1=num.toString(), 
+sL=str1.length;
+if (sL==1) {s1="0"; s2=str1} else {  s2=str1.charAt(sL-2); s2=str1.charAt(sL-1)} 
+if (s2=="1" && s1!="1")  {years0=' год '} else if 
+((s2=="2"||s2=="3"||s2=="4" )&&s1!="1")  {years0=' года '} else {years0=' лет '};
+return years0
 }
 
 // ! 11.  lifespanFunc(Creature=Array(2))
@@ -562,23 +586,23 @@ function lifespanFunc(Creature = Array(2)) {
         switch (lifespan[companion]) {
           case 1:
             allCreatures[Creature[companion]].mood = smile(); // the creature feels better, it smiles
-            dialog = Name1 + ":Very good with you," + Name2 + "!  " + smile();
+            dialog = Name1 + ": Очень хорошо с тобой," + Name2 + "!  " + smile(); // ":Very good with you,"
             if (
               allCreatures[Creature[companion]].lifespan -
                 allCreatures[Creature[companion]].age ==
               1
             )
-              dialog = dialog + " You raised me!";
+              dialog = dialog + " Мое воскрешение произошло благодаря тебе!"; // " You raised me!"
             break;
           case -1:
             allCreatures[Creature[companion]].mood = cry(); // creature worse from communication, it cries
-            dialog = Name1 + ": It's not fun with you," + Name2 + "!" + cry();
+            dialog = Name1 + ": С тобой не прикольно," + Name2 + "!" + cry(); //  ": It's not fun with you,"
             if (
               allCreatures[Creature[companion]].lifespan -
                 allCreatures[Creature[companion]].age <=
               0
             )
-              dialog = dialog + " You killed me!";
+              dialog = dialog + " Ты убиваешь меня!";  // " You killed me!"
             break;
         }
       }
@@ -607,18 +631,18 @@ function checkBirth(Creature = Array(2)) {
         Creature[1],
       ]); // "Birth Same rase!" // todo>   Birth   --> Look 13. BirthCreatures(Creature[0], Creature[1], nType)
     } else {
-      // if types of creatures is NOT equal
-      let st1 = allCreatures[(Creature[0], 9)], //subType 1 creature
-        st2 = allCreatures[(Creature[1], 9)]; //subType 2 creature
-      if3 = //   condition 3
-        (st1 == "spirit" && st2 == "waterSream") ||
-        (st2 == "spirit" && st1 == "waterSream"); //if "Half-breed!"
-      if (if3) {
-        // Rase-probability 50/50 "spirit" / "water"
-        CreaturesType = rnd(2, -1) == 1 ? "spirit" : "water"; // 3 -spirit / 4-water (subType - randomly choose subTipe - Ice/Water/Sream)
-        BirthCreatures(CreaturesType, [Creature[0], Creature[1]]);
-      }
-      // todo>   Birth Half-breed  --> Look 13. BirthCreatures(Creature[0], Creature[1], nCreaturesType)
+        // if types of creatures is NOT equal
+        let st1 = allCreatures[Creature[0]].subType,
+            st2 = allCreatures[Creature[1]].subType;//subType 1 creature, subType 2 creature
+            if3 = //   condition 3
+          (st1 == "Дух" && st2 == "Пар") ||
+          (st2 == "Дух" && st1 == "Пар"); //if "Half-breed!"
+        if (if3) {
+          // Rase-probability 50/50 "spirit" / "water"
+          let CreaturesType0 = rnd(2, -1) == 1 ? "Дух" : "Вода"; // 3 -spirit / 4-water (subType - randomly choose subTipe - Ice/Water/Sream)
+          BirthCreatures(CreaturesType0, [Creature[0], Creature[1]]);
+        }
+        // todo>   Birth Half-breed  --> Look 13. BirthCreatures(Creature[0], Creature[1], nCreaturesType)
     }
   }
 }
@@ -635,17 +659,21 @@ function BirthCreatures(CreaturesType, Creature = Array(2)) {
     LogSwitch.Dialogs != 0 &&
     allCreatures[Creature[0]].id != allCreatures[Creature[1]].id
   )
-    Log(`${parent[0]}: - I love you! 
-${parent[1]}: - I love you too! `);
-  if (allCreatures.length <= 5000000) {
+    Log(`${parent[0]}: - Я тебя люблю! 
+${parent[1]}: - Я тоже тебя люблю! `);
+/* `${parent[0]}: - I love you! 
+${parent[1]}: - I love you too! `*/ 
+
+  if (lengthCreatures <= 5000000) {
     // if number not big -borning, else overflow of population
-    let gender = rnd(2, 0) == 1 ? "female" : "male",
+    let gender = rnd(2, 0) == 1 ? "женщина" : "мужчина",
       age = 0,
       parent1 = Creature[0], // generation 0   id 1  gender 2  nameCr 3  age 4  lifespan 5
       parent2 = Creature[1], // parent1 6  parent2 7   Type 8   subType 9    mood 10   numInBase 11
-      subType = install_TypeSubType(CreaturesType); // todo>    Entering the CreaturesType and subType of the creature --> Look 15.install_TypeSubType(nType)
-    mood = switchMood(); // todo>  Check the mood of creature :)  :(  :o  --> Look 16.switchMood()
-    allCreatures.push(
+      subType = install_TypeSubType(CreaturesType), // todo>    Entering the CreaturesType and subType of the creature --> Look 15.install_TypeSubType(nType)
+      mood = switchMood(); // todo>  Check the mood of creature :)  :(  :o  --> Look 16.switchMood()
+
+      allCreatures.push(
       // added the Creature object to the array
       new CreatureConstructor(
         gender,
@@ -660,11 +688,11 @@ ${parent[1]}: - I love you too! `);
       // todo>    Created a description of the creature
       Log(
         subType +
-          " is Born !!! happy parents " +
+          ", с днем рождения !!! Счастливые родители " +
           parent[0] +
-          " and " +
+          " и " +
           parent[1]
-      ); // show subType who was born
+      ); // " is Born !!! happy parents " " and " //  show subType who was born
     if (LogSwitch.detaleWhoBorn != 0)
       descriptionCreature(allCreatures[allCreatures.length - 1]); // display the parameters of the new creature / if LogSwitch !=""
   }
@@ -674,35 +702,37 @@ ${parent[1]}: - I love you too! `);
 function Namer(gender) {
   // dictionary of consonants
   consonants = [
-    "q",
-    "w",
-    "r",
-    "t",
-    "n",
-    "m",
-    "p",
-    "s",
-    "d",
-    "f",
-    "g",
-    "h",
-    "j",
-    "k",
-    "l",
-    "z",
-    "x",
-    "c",
-    "v",
-    "b",
-  ];
+    "й",
+    "ц",
+    "к",
+    "н",
+    "г",
+    "ш",
+    "щ",
+    "з",
+    "х",
+    "ф",
+    "в",
+    "п",
+    "р",
+    "л",
+    "д",
+    "ж",
+    "ч",
+    "с",
+    "м",
+    "т",
+    "б",
+  ]; /* "q",  "w",  "r",  "t",  "n",  "m",  "p",  "s",  "d",  "f",  "g",  "h",  "j",  "k",
+  "l",  "z",  "x",  "c",  "v",  "b",*/
   consonantsLen = consonants.length; // consonant dictionary size
-  vowels = ["e", "y", "u", "o", "a"]; // dictionary of vowel
+  vowels = ["у", "е", "а", "о", "э", "я", "и", "ю"]; //"e", "y", "u", "o", "a" // dictionary of vowel
   vowelsLen = vowels.length; //vowel dictionary size
-  femEndingNames = ["y", "a", "e"]; //  dictionary of ends of female names
+  femEndingNames = ["я", "а", "ия", "ая", "эя", "оя", "уя"]; // "y", "a", "e" // dictionary of ends of female names
   femEndNamesLen = femEndingNames.length; //  dictionary size of female names ends
   nameLen = rnd(10, 1); //name length - from 2 to 11 letters
   nameCreature = ""; // empty name
-  if (gender == "female") {
+  if (gender == "женщина") { //"female"
     vowelСonsonantSwitch = -1; //  letter label to insert into name in next time
   } else {
     vowelСonsonantSwitch = 1;
@@ -733,19 +763,27 @@ function Namer(gender) {
 function install_TypeSubType(CreaturesType) {
   let subType; // entering the subtype of the creature depending on the conditional Type
   switch (CreaturesType) {
-    case ("wood", "steel", "spirit"):
-      return (subType = CreaturesType);
-    case "water":
+    case `Дерево`:
+    case `Сталь`:
+    case `Дух`:
+      subType = CreaturesType;
+      break;
+    case `Вода`:
       subType = rnd(3, 0);
       switch (subType) {
         case 1:
-          return (subType = "ice");
+          subType = `Лед`;
+          break; // "ice"
         case 2:
-          return (subType = "liquid");
+          subType = `Жидкость`;
+          break; // "liquid"
         case 3:
-          return (subType = "sream");
+          subType = `Пар`;
+          break; // "sream"
       }
+    break;
   }
+  return subType
 }
 
 // ! 16. switchMood()   - Check the mood of creature :)  :(  :o
@@ -769,20 +807,20 @@ function switchMood() {
 
 // ! 17. talk()
 function talk() {
-  return "Ж:-O  bla-bla";
+  return " бла-бла  Ж:-O"; // bla-bla
 }
 // ! 18. smile()
 function smile() {
-  return "Ж:-D  Ha-ha!";
+  return " Ха-ха! Ж:-D"; // Ha-ha
 }
 // ! 19. cry()
 function cry() {
-  return "Ж:  wee-wee.. ";
+  return " уии-уаа..  Ж:("; // wee-wee
 }
 
 // ! 20. Aging()   -  growing up being on one year
 function Aging() {
-  for (let i = allCreatures.length - 1; i >= 0; i--) {
+  for (let i = lengthCreatures - 1; i >= 0; i--) {
     allCreatures[i].age++; //  age growth
     DeathСheck(i); // todo>   check whether the time to die)    --> Look 21.DeathСheck(i)
   }
@@ -793,14 +831,12 @@ function DeathСheck(i) {
   if (allCreatures[i].lifespan - allCreatures[i].age <= 0) {
     //if the life resource is more than or equal to age
     if (LogSwitch.typeWhoDiedAge != 0)
-      Log(
-        "death " +
-          allCreatures[i].subType +
-          " " +
-          allCreatures[i].name +
-          " it was " +
-          allCreatures[i].age
-      ); // show type who died  / if LogSwitch != ""
+       {
+        let fem0
+        if (allCreatures[i].gender == "женщина") {fem0= 'а'} else {fem0=''};
+    Log(`${allCreatures[i].subType} ${allCreatures[i].name}, чей возраст был ${allCreatures[i].age}${years(allCreatures[i].age)} познал${fem0} смерть`);
+  }
+    // it was // show type who died   //death/ if LogSwitch != ""
     if (allCreatures[i].CreaturesType == 1) {
       // if dying type==wood
       if (rnd(2, -1) == 1) {
@@ -808,8 +844,9 @@ function DeathСheck(i) {
         BirthCreatures(allCreatures[i].CreaturesType, [i, i]); // Same rase // todo>   Birth --> Look 13. BirthCreatures(Parent1, Parent1, CreaturesType=1/wood/)
       }
     }
-    allCreatures[i] = allCreatures[allCreatures.length - 1]; // rewrote the last creature in the array to the place of the deceased,
+    allCreatures[i] = allCreatures[lengthCreatures - 1]; // rewrote the last creature in the array to the place of the deceased,
     allCreatures.pop(); // and then deleted the last entry in the array
+    lengthCreatures--
   }
 }
 
